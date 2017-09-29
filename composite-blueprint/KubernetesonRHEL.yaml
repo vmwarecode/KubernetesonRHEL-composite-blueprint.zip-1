@@ -1,0 +1,356 @@
+id: KubernetesonRHEL
+name: Kubernetes Custom
+description: Kubernetes on RHEL 7.3 and customizable NSX-T versioning.
+status: PUBLISHED
+components:
+  ExtKubeRHELManagement:
+    type: Infrastructure.Network.Network.Existing
+    data:
+      name:
+        fixed: ExtKubeRHELManagement
+      network_profile:
+        fixed: Ext-KubeRHEL-Management
+  ExtKubeRHELPodTraffic:
+    type: Infrastructure.Network.Network.Existing
+    data:
+      name:
+        fixed: ExtKubeRHELPodTraffic
+      network_profile:
+        fixed: Ext-KubeRHEL-Pod-Traffic
+  Kube-Ignite-Master:
+    type: Software.KubeIgnite
+    data:
+      Custom_Namespace:
+        default: sphinx
+        required: true
+      Git_Starter_App:
+        default: https://github.com/hanymichael/NSX-CNA-Lab.git
+        required: false
+        visible: true
+      KubeMaster:
+        default: ${_resource~vMaster~ip_address}
+        required: true
+      KubeMaster_hostname: ${_resource~vMaster~MachineName}
+      KubeNode:
+        default: ${_resource~vNode~ip_address}
+        required: true
+      KubeNode01:
+        default: ${_resource~vNode~ip_address}
+        required: true
+      KubeNode01_hostname: ${_resource~vNode~MachineName}
+      KubeNode02:
+        default: rrr
+        required: true
+      KubeNode_hostname: ${_resource~vNode~MachineName}
+      NSX_NCP_Cluster:
+        default: vra01
+        required: true
+        visible: true
+      NSX_Pods_Subnet_CIDR:
+        fixed: 10.95.0.0/16
+        required: true
+        visible: false
+      apiserver_host_ip:
+        default: ${_resource~vMaster~ip_address}
+        required: true
+      apiserver_host_port:
+        default: '6443'
+        required: true
+      custom_namespace:
+        default: sphinx
+        required: true
+        visible: true
+      host:
+        fixed: ${_resource~vMaster}
+      kubeToken:
+        default: kube00.ignite0000000000
+        required: true
+      kubeVersion:
+        default: 1.6.6
+        required: true
+        visible: true
+      kube_custom: 'yes'
+      kube_role: master
+      ncp_docker_image:
+        default: registry.local/ob-$nsx_ujo_build/nsx-ncp:latest
+        required: true
+      ncpcluster:
+        default: rhel
+        required: true
+        visible: false
+      nsx_api_managers:
+        default: 192.168.110.26
+        required: true
+      nsx_api_password:
+        default: VMware1!
+        required: true
+      nsx_api_user:
+        default: admin
+        required: true
+      nsx_cni_release:
+        default: 1.0.0
+        required: true
+      nsx_ovs_build:
+        default: '6383692'
+        required: true
+        visible: false
+      nsx_ovs_release:
+        default: 2.7.0
+        required: true
+      nsx_ujo_build:
+        default: '6500154'
+        required: true
+        visible: false
+      ovs_uplink_port:
+        default: ens224
+        required: true
+        visible: false
+      pod_logicalswitch_id:
+        default: 8c81d618-001a-40dc-a25e-57a43ae3b9b5
+        required: true
+        visible: false
+      script_path:
+        default: /root/kube-ignite
+        required: true
+      subnet_prefix:
+        default: '26'
+        required: true
+        visible: true
+  Kube-Ignite-Node:
+    type: Software.KubeIgnite
+    dependsOn:
+    - Kube-Ignite-Master
+    data:
+      Custom_Namespace:
+        default: sphinx
+        required: true
+      Git_Starter_App:
+        default: https://github.com/hanymichael/NSX-CNA-Lab.git
+        required: false
+      KubeMaster:
+        default: ${_resource~vMaster~ip_address}
+        required: true
+      KubeMaster_hostname: ${_resource~vMaster~MachineName}
+      KubeNode:
+        default: ${_resource~vNode~ip_address}
+        required: true
+      KubeNode_hostname: ''
+      NSX_NCP_Cluster:
+        default: ${_resource~Kube-Ignite-Master~NSX_NCP_Cluster}
+        required: true
+      NSX_Pods_Subnet_CIDR:
+        default: ${_resource~Kube-Ignite-Master~NSX_Pods_Subnet_CIDR}
+        required: true
+      apiserver_host_ip:
+        default: ${_resource~Kube-Ignite-Master~apiserver_host_ip}
+        required: true
+      apiserver_host_port:
+        default: ${_resource~Kube-Ignite-Master~apiserver_host_port}
+        required: true
+      domain_name: core.hypervizor.com
+      host:
+        fixed: ${_resource~vNode}
+      kubeToken:
+        default: ${_resource~Kube-Ignite-Master~kubeToken}
+        required: true
+      kubeVersion:
+        default: ${_resource~Kube-Ignite-Master~kubeVersion}
+        required: true
+      kube_custom: 'yes'
+      kube_role: node
+      mgmt_uplink_port: ens192
+      ncp_docker_image:
+        default: ${_resource~Kube-Ignite-Master~ncp_docker_image}
+        required: true
+      nsx_api_managers:
+        default: ${_resource~Kube-Ignite-Master~nsx_api_managers}
+        required: true
+      nsx_api_password:
+        default: ${_resource~Kube-Ignite-Master~nsx_api_password}
+        required: true
+      nsx_api_user:
+        default: ${_resource~Kube-Ignite-Master~nsx_api_user}
+        required: true
+      nsx_cni_release:
+        default: ${_resource~Kube-Ignite-Master~nsx_cni_release}
+        required: true
+      nsx_ovs_build:
+        default: ${_resource~Kube-Ignite-Master~nsx_ovs_build}
+        required: true
+      nsx_ovs_release:
+        default: ${_resource~Kube-Ignite-Master~nsx_ovs_release}
+        required: true
+      nsx_ujo_build:
+        default: ${_resource~Kube-Ignite-Master~nsx_ujo_build}
+        required: true
+      ovs_uplink_port:
+        default: ens224
+        required: true
+      pod_logicalswitch_id:
+        default: ${_resource~Kube-Ignite-Master~pod_logicalswitch_id}
+        required: true
+      script_path:
+        default: ${_resource~Kube-Ignite-Master~script_path}
+        required: true
+      subnet_prefix:
+        default: ${_resource~Kube-Ignite-Master~subnet_prefix}
+        required: true
+  vMaster:
+    type: Infrastructure.CatalogItem.Machine.Virtual.vSphere
+    data:
+      _cluster:
+        default: 1
+        max: 1
+        min: 1
+      action:
+        fixed: LinkedClone
+      allow_storage_policies:
+        fixed: false
+      blueprint_type:
+        fixed: '1'
+      cpu:
+        default: 1
+        max: 1
+        min: 1
+      disks:
+      - capacity: 40
+        custom_properties: null
+        id: 1504812539653
+        initial_location: ''
+        is_clone: true
+        label: Hard disk 1
+        storage_reservation_policy: ''
+        userCreated: false
+        volumeId: 0
+      guest_customization_specification: RHEL-Config
+      machine_prefix:
+        fixed:
+          id: vRedMaster
+      max_network_adapters: {}
+      max_volumes: {}
+      memory:
+        default: 6144
+        max: 6144
+        min: 6144
+      nics:
+      - address: ''
+        assignment_type: Static
+        id: 0
+        load_balancing: ''
+        network: ${_resource~ExtKubeRHELManagement}
+        network_profile: Ext-KubeRHEL-Management
+      - address: ''
+        assignment_type: DHCP
+        id: 1
+        load_balancing: ''
+        network: ${_resource~ExtKubeRHELPodTraffic}
+        network_profile: Ext-KubeRHEL-Pod-Traffic
+      provisioning_workflow:
+        fixed:
+          id: CloneWorkflow
+          label: CloneWorkflow
+      reservation_policy:
+        id: Transformers
+        label: Transformers
+      security_groups: []
+      security_tags: []
+      snapshot_name:
+        fixed: vRA-START-DockerPreped
+      source_machine:
+        fixed:
+          id: e2e673f0-2b6e-440d-abfb-b239803259cd
+          label: vRA-VMT-RHEL-NSXT
+      source_machine_external_snapshot:
+        fixed: 7
+      source_machine_name:
+        fixed: vRA-VMT-RHEL-NSXT
+      source_machine_vmsnapshot:
+        fixed:
+          id: '11'
+      storage:
+        default: 40
+        max: 40
+        min: 40
+  vNode:
+    type: Infrastructure.CatalogItem.Machine.Virtual.vSphere
+    data:
+      _cluster:
+        default: 1
+        max: 10
+        min: 1
+      action:
+        fixed: LinkedClone
+      allow_storage_policies:
+        fixed: false
+      blueprint_type:
+        fixed: '1'
+      cpu:
+        default: 1
+        max: 1
+        min: 1
+      disks:
+      - capacity: 40
+        custom_properties: null
+        id: 1504812564752
+        initial_location: ''
+        is_clone: true
+        label: Hard disk 1
+        storage_reservation_policy: ''
+        userCreated: false
+        volumeId: 0
+      guest_customization_specification: RHEL-Config
+      machine_prefix:
+        fixed:
+          id: vRedNode
+      max_network_adapters: {}
+      max_volumes: {}
+      memory:
+        default: 6144
+        max: 6144
+        min: 6144
+      nics:
+      - address: ''
+        assignment_type: Static
+        id: 0
+        load_balancing: ''
+        network: ${_resource~ExtKubeRHELManagement}
+        network_profile: Ext-KubeRHEL-Management
+      - address: ''
+        assignment_type: DHCP
+        id: 1
+        load_balancing: ''
+        network: ${_resource~ExtKubeRHELPodTraffic}
+        network_profile: Ext-KubeRHEL-Pod-Traffic
+      provisioning_workflow:
+        fixed:
+          id: CloneWorkflow
+          label: CloneWorkflow
+      reservation_policy:
+        id: Transformers
+        label: Transformers
+      security_groups: []
+      security_tags: []
+      snapshot_name:
+        fixed: vRA-START-DockerPreped
+      source_machine:
+        fixed:
+          id: e2e673f0-2b6e-440d-abfb-b239803259cd
+          label: vRA-VMT-RHEL-NSXT
+      source_machine_external_snapshot:
+        fixed: 7
+      source_machine_name:
+        fixed: vRA-VMT-RHEL-NSXT
+      source_machine_vmsnapshot:
+        fixed:
+          id: '11'
+      storage:
+        default: 40
+        max: 40
+        min: 40
+layout:
+  ExtKubeRHELManagement: 1,0
+  ExtKubeRHELPodTraffic: 2,0
+  Kube-Ignite-Master: 0,0
+  Kube-Ignite-Node: 0,0
+  vMaster: 0,1
+  vNode: 0,2

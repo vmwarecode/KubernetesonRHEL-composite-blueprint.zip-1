@@ -1,0 +1,12 @@
+name: "auto-generated-pkg-f2249324-a48d-44ee-99bf-a3db909b8dc7"
+productVersion: "7.3.0-SNAPSHOT"
+data:
+- locator: "composite-blueprint/KubernetesonRHEL.yaml"
+  name: "Kubernetes Custom"
+  description: "Kubernetes Custom"
+  dependencies:
+  - "software-component/Software.KubeIgnite.yaml"
+- locator: "software-component/Software.KubeIgnite.yaml"
+  name: "Kube-Ignite v1.0"
+  description: ""
+exportTime: "2017-09-29T19:33:22.998Z"
